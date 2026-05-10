@@ -505,6 +505,15 @@
       .fader-col { width: 26px; }
     }
 
+    /* ---- Record button ---- */
+    #rec-btn { flex: 0; padding: 6px 14px; min-width: auto; letter-spacing: 0.15em; }
+    #rec-btn.recording {
+      border-color: #cc2222; color: #cc2222;
+      animation: recpulse 1s ease-in-out infinite;
+    }
+    @keyframes recpulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+    .header-right { display: flex; align-items: center; gap: 12px; }
+
     /* ---- Tablet: keep side-by-side but allow scroll ---- */
     @media (max-width: 900px) and (min-width: 641px) {
       body { height: auto; min-height: 100dvh; overflow-y: auto; }
@@ -518,9 +527,12 @@
 
 <header>
   <h1>RAW SAS-1 <span>Sound Art Studio</span></h1>
-  <div id="status">
-    <span class="dot"></span>
-    <span id="status-text">Ready</span>
+  <div class="header-right">
+    <button id="rec-btn" class="btn">● Rec</button>
+    <div id="status">
+      <span class="dot"></span>
+      <span id="status-text">Ready</span>
+    </div>
   </div>
 </header>
 
@@ -1647,6 +1659,36 @@ function createSamplePlayer(sfx) {
 // Initialise both players
 createSamplePlayer('a');
 createSamplePlayer('b');
+
+// ================================================================
+// RECORDER — captures master output and downloads as .webm
+// ================================================================
+const recorder = new Tone.Recorder();
+Tone.Destination.connect(recorder);
+let recActive = false;
+
+document.getElementById('rec-btn').addEventListener('click', async () => {
+  await Tone.start();
+  const btn = document.getElementById('rec-btn');
+  if (!recActive) {
+    await recorder.start();
+    recActive = true;
+    btn.textContent = '■ Stop';
+    btn.classList.add('recording');
+  } else {
+    const blob = await recorder.stop();
+    recActive = false;
+    btn.textContent = '● Rec';
+    btn.classList.remove('recording');
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const ts = new Date().toISOString().slice(0, 19).replace(/[T:]/g, '-');
+    a.download = `sas1-${ts}.webm`;
+    a.href = url;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+});
 </script>
 </body>
 </html>
