@@ -474,6 +474,41 @@
       z-index: 10;
     }
     #loading.visible { opacity: 1; pointer-events: all; }
+
+    /* ---- Mobile / small screen ---- */
+    @media (max-width: 640px) {
+      body { height: auto; min-height: 100dvh; overflow-y: auto; }
+
+      header { padding: 12px 14px 10px; }
+      h1 { font-size: 13px; }
+      h1 span { font-size: 10px; margin-left: 8px; }
+
+      main { padding: 10px 10px 20px; gap: 7px; overflow-y: visible; }
+
+      /* Layer grids: 5 cols → 3, signal 4 cols → 2 */
+      .layers         { grid-template-columns: repeat(3, 1fr); }
+      .layers-signal  { grid-template-columns: repeat(2, 1fr); }
+
+      /* Controls: 4 cols → 2×2 */
+      .controls-row { grid-template-columns: 1fr 1fr; }
+
+      /* Samplers: side by side → stacked */
+      .samples-row { grid-template-columns: 1fr; }
+
+      /* Each sample: transport wraps, body stays horizontal */
+      .sample-transport { flex-wrap: wrap; }
+      .sample-name { min-width: 60%; order: -1; }
+
+      /* Faders usable height on phone */
+      .v-slider { min-height: 80px; }
+      .fader-col { width: 26px; }
+    }
+
+    /* ---- Tablet: keep side-by-side but allow scroll ---- */
+    @media (max-width: 900px) and (min-width: 641px) {
+      body { height: auto; min-height: 100dvh; overflow-y: auto; }
+      main { overflow-y: visible; }
+    }
   </style>
 </head>
 <body>
@@ -601,7 +636,7 @@
     <div class="sample-section">
       <div class="sample-transport">
         <label class="btn-label" for="sample-file-a">Load</label>
-        <input type="file" id="sample-file-a" accept="audio/*" style="display:none">
+        <input type="file" id="sample-file-a" accept="audio/*,.wav,.mp3,.m4a,.aiff,.aif,.ogg,.flac,.opus,.webm,.caf" style="display:none">
         <span class="sample-name" id="sample-name-a">No file loaded</span>
         <span class="sample-time" id="sample-time-a"></span>
         <button class="btn" id="sample-play-a" disabled>Play</button>
@@ -664,7 +699,7 @@
     <div class="sample-section">
       <div class="sample-transport">
         <label class="btn-label" for="sample-file-b">Load</label>
-        <input type="file" id="sample-file-b" accept="audio/*" style="display:none">
+        <input type="file" id="sample-file-b" accept="audio/*,.wav,.mp3,.m4a,.aiff,.aif,.ogg,.flac,.opus,.webm,.caf" style="display:none">
         <span class="sample-name" id="sample-name-b">No file loaded</span>
         <span class="sample-time" id="sample-time-b"></span>
         <button class="btn" id="sample-play-b" disabled>Play</button>
