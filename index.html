@@ -1204,7 +1204,6 @@ const FTYPE_FREQ_DEFAULTS = { lowpass: 100, highpass: 0, bandpass: 50 };
 function createSamplePlayer(sfx) {
   let sNodes        = null;
   let sLoop         = false;
-  let blobUrl       = null;
   let frozen        = false;
   let playStartTime = null;
   let wowInterval   = null;
@@ -1289,7 +1288,7 @@ function createSamplePlayer(sfx) {
     }
   }
 
-  async function build(url) {
+  async function build(audioBuffer) {
     destroy();
     frozen = false; playStartTime = null; paused = false; pausePosition = 0;
 
@@ -1323,23 +1322,15 @@ function createSamplePlayer(sfx) {
     sFilter.chain(sDelay, sReverb, sGain);
     sEQ.connect(sFilter);
 
-    const player = new Tone.Player({
-      url,
-      loop:         sLoop,
-      playbackRate: getCurRate(),
-      onload: () => {
-        $('sample-play').disabled = false;
-        $('sample-stop').disabled = false;
-        $('sample-name').classList.add('loaded');
-        const scrub = $('sample-scrub');
-        if (scrub) { scrub.disabled = false; scrub.value = 0; }
-        updateTimeDisplay();
-      }
-    });
+    // Load from pre-decoded AudioBuffer — works reliably on iOS Safari
+    const player = new Tone.Player();
+    player.buffer.set(audioBuffer);
+    player.loop = sLoop;
+    player.playbackRate = getCurRate();
     player.connect(sEQ);
 
     player.onstop = () => {
-      if (seeking || player.state === 'started') { seeking = false; return; }  // seek in progress
+      if (seeking || player.state === 'started') { seeking = false; return; }
       if (!paused) {
         $('sample-play').textContent = 'Play';
         $('sample-play').classList.remove('active');
@@ -1352,6 +1343,14 @@ function createSamplePlayer(sfx) {
 
     sNodes = { player, sEQ, sFilter, sDelay, sReverb, sGain };
     updateWow();
+
+    // Buffer already decoded — enable controls immediately
+    $('sample-play').disabled = false;
+    $('sample-stop').disabled = false;
+    $('sample-name').classList.add('loaded');
+    const scrub = $('sample-scrub');
+    if (scrub) { scrub.disabled = false; scrub.value = 0; }
+    updateTimeDisplay();
   }
 
   function destroy() {
@@ -1373,8 +1372,6 @@ function createSamplePlayer(sfx) {
   $('sample-file').addEventListener('change', async function() {
     const file = this.files[0];
     if (!file) return;
-    if (blobUrl) URL.revokeObjectURL(blobUrl);
-    blobUrl = URL.createObjectURL(file);
     $('sample-name').textContent = 'Loading…';
     $('sample-name').classList.remove('loaded');
     $('sample-play').disabled = true;
@@ -1383,9 +1380,16 @@ function createSamplePlayer(sfx) {
     const scrub = $('sample-scrub');
     if (scrub) { scrub.value = 0; scrub.disabled = true; }
     stopTimeInterval();
-    await Tone.start();
-    await build(blobUrl);
-    if (sNodes) $('sample-name').textContent = file.name;
+    try {
+      await Tone.start();
+      const arrayBuffer = await file.arrayBuffer();
+      const audioBuffer = await Tone.getContext().rawContext.decodeAudioData(arrayBuffer);
+      await build(audioBuffer);
+      if (sNodes) $('sample-name').textContent = file.name;
+    } catch(e) {
+      $('sample-name').textContent = 'Format not supported';
+      console.error('Audio decode error:', e);
+    }
   });
 
   // Play / Pause / Resume
