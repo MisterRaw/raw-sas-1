@@ -767,6 +767,12 @@
 // RAW SAS-1 — Sound Art Studio
 // ================================================================
 
+// iOS requires AudioContext resume inside a direct user gesture.
+// Pre-warm on first tap so it's ready before file loading or playback.
+['touchstart','click'].forEach(ev =>
+  document.addEventListener(ev, () => Tone.start().catch(() => {}), { once: true, passive: true })
+);
+
 const rnd    = (a, b) => a + Math.random() * (b - a);
 const rndInt = (a, b) => Math.floor(a + Math.random() * (b - a + 1));
 
@@ -1381,9 +1387,18 @@ function createSamplePlayer(sfx) {
     if (scrub) { scrub.value = 0; scrub.disabled = true; }
     stopTimeInterval();
     try {
-      await Tone.start();
-      const arrayBuffer = await file.arrayBuffer();
-      const audioBuffer = await Tone.getContext().rawContext.decodeAudioData(arrayBuffer);
+      // Read file via FileReader (widest iOS support)
+      const arrayBuffer = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload  = e => resolve(e.target.result);
+        reader.onerror = reject;
+        reader.readAsArrayBuffer(file);
+      });
+      // Decode via callback form of decodeAudioData (more compatible than Promise form on iOS)
+      const ctx = Tone.getContext().rawContext;
+      const audioBuffer = await new Promise((resolve, reject) =>
+        ctx.decodeAudioData(arrayBuffer, resolve, reject)
+      );
       await build(audioBuffer);
       if (sNodes) $('sample-name').textContent = file.name;
     } catch(e) {
