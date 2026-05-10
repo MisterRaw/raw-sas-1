@@ -40,7 +40,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 16px 24px 12px;
+      padding: 10px 24px 8px;
       border-bottom: 1px solid #2a2410;
       flex-shrink: 0;
     }
@@ -64,7 +64,7 @@
       display: flex;
       align-items: center;
       gap: 7px;
-      font-size: 10px;
+      font-size: 11px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: #7a6a3a;
@@ -94,8 +94,8 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      padding: 14px 18px 18px;
-      gap: 9px;
+      padding: 8px 14px 8px;
+      gap: 6px;
       overflow-y: auto;
     }
 
@@ -117,10 +117,10 @@
       background: #100f08;
       border: 1px solid #1e1c10;
       border-radius: 4px;
-      padding: 12px 12px 14px;
+      padding: 8px 10px 10px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 7px;
     }
 
     .layer-header {
@@ -130,14 +130,14 @@
     }
 
     .layer-name {
-      font-size: 10px;
+      font-size: 11px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: #7a6a3a;
     }
 
     .layer-val {
-      font-size: 11px;
+      font-size: 12px;
       color: #e8960c;
       font-variant-numeric: tabular-nums;
       min-width: 22px;
@@ -145,7 +145,7 @@
     }
 
     .layer-desc {
-      font-size: 10px;
+      font-size: 11px;
       color: #6a5e3e;
       line-height: 1.4;
       margin-top: -4px;
@@ -193,7 +193,7 @@
     }
 
     .panel-label {
-      font-size: 10px;
+      font-size: 11px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: #7a6a3a;
@@ -210,7 +210,7 @@
       border: 1px solid #3a3018;
       border-radius: 3px;
       color: #b09040;
-      font-size: 10px;
+      font-size: 11px;
       font-family: inherit;
       letter-spacing: 0.08em;
       cursor: pointer;
@@ -227,7 +227,7 @@
 
     .btn-trigger {
       padding: 6px 4px;
-      font-size: 9px;
+      font-size: 11px;
       letter-spacing: 0.14em;
     }
 
@@ -238,7 +238,7 @@
       border: 1px solid #3a3018;
       border-radius: 3px;
       color: #b09040;
-      font-size: 10px;
+      font-size: 11px;
       font-family: inherit;
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -267,12 +267,12 @@
       background: #100f08;
       border: 1px solid #1e1c10;
       border-radius: 4px;
-      padding: 10px 12px;
+      padding: 6px 10px 8px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 5px;
       min-height: 0;
-      overflow: hidden;
+      overflow-y: auto;
     }
 
     .sample-transport {
@@ -308,7 +308,7 @@
     }
 
     .sample-time {
-      font-size: 9px;
+      font-size: 11px;
       letter-spacing: 0.08em;
       color: #4a4030;
       font-variant-numeric: tabular-nums;
@@ -374,7 +374,7 @@
     }
 
     .fader-label {
-      font-size: 8px;
+      font-size: 10px;
       color: #7a6a3a;
       letter-spacing: 0.12em;
       text-transform: uppercase;
@@ -382,7 +382,7 @@
     }
 
     .fader-val {
-      font-size: 8px;
+      font-size: 10px;
       color: #e8960c;
       font-variant-numeric: tabular-nums;
       flex-shrink: 0;
@@ -418,7 +418,7 @@
     .v-slider:active::-webkit-slider-thumb { background: #ffb822; }
 
     .sample-name {
-      font-size: 9px;
+      font-size: 11px;
       color: #4a4030;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -435,7 +435,7 @@
     .density-labels {
       display: flex;
       justify-content: space-between;
-      font-size: 9px;
+      font-size: 10px;
       color: #5a4e30;
       letter-spacing: 0.1em;
       text-transform: uppercase;
@@ -528,24 +528,24 @@
   <!-- ---- Core layers ---- -->
   <div class="layers">
     <div class="layer">
-      <div class="layer-header"><span class="layer-name">Drone</span><span class="layer-val" id="val-drone">70</span></div>
+      <div class="layer-header"><span class="layer-name">Drone</span><span class="layer-val" id="val-drone">20</span></div>
       <span class="panel-label" style="margin-top:2px;">Volume</span>
-      <input type="range" id="vol-drone" min="0" max="100" value="70">
+      <input type="range" id="vol-drone" min="0" max="100" value="20">
     </div>
     <div class="layer">
-      <div class="layer-header"><span class="layer-name">Texture</span><span class="layer-val" id="val-texture">40</span></div>
+      <div class="layer-header"><span class="layer-name">Texture</span><span class="layer-val" id="val-texture">0</span></div>
       <span class="panel-label" style="margin-top:2px;">Volume</span>
-      <input type="range" id="vol-texture" min="0" max="100" value="40">
+      <input type="range" id="vol-texture" min="0" max="100" value="0">
     </div>
     <div class="layer">
-      <div class="layer-header"><span class="layer-name">Tones</span><span class="layer-val" id="val-tones">30</span></div>
+      <div class="layer-header"><span class="layer-name">Tones</span><span class="layer-val" id="val-tones">0</span></div>
       <span class="panel-label" style="margin-top:2px;">Volume</span>
-      <input type="range" id="vol-tones" min="0" max="100" value="30">
+      <input type="range" id="vol-tones" min="0" max="100" value="0">
     </div>
     <div class="layer">
-      <div class="layer-header"><span class="layer-name">Rumble</span><span class="layer-val" id="val-movement">25</span></div>
+      <div class="layer-header"><span class="layer-name">Rumble</span><span class="layer-val" id="val-movement">0</span></div>
       <span class="panel-label" style="margin-top:2px;">Volume</span>
-      <input type="range" id="vol-movement" min="0" max="100" value="25">
+      <input type="range" id="vol-movement" min="0" max="100" value="0">
     </div>
     <div class="layer">
       <div class="layer-header"><span class="layer-name">Arpeggio</span><span class="layer-val" id="val-arpeggio">0</span></div>
@@ -788,7 +788,7 @@ const state = {
   running: false,
   root: 'C',
   preset: 'neutral',
-  volumes: { drone:70, texture:40, tones:30, movement:25, arpeggio:0, modem:0, radio:0, unstable:0, breath:0 },
+  volumes: { drone:20, texture:0, tones:0, movement:0, arpeggio:0, modem:0, radio:0, unstable:0, breath:0 },
   density: 40,
   reverbWet: 65,
   arpRate: 8,
