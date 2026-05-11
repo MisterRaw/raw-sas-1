@@ -12,7 +12,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      background: #0c0b07;
+      background: #0c0707;
       color: #c4b896;
       font-family: 'SF Mono', 'Courier New', 'Lucida Console', monospace;
       height: 100dvh;
@@ -41,7 +41,7 @@
       justify-content: space-between;
       align-items: center;
       padding: 10px 24px 8px;
-      border-bottom: 1px solid #2a2410;
+      border-bottom: 1px solid #2a1212;
       flex-shrink: 0;
     }
 
@@ -50,11 +50,11 @@
       font-weight: 400;
       letter-spacing: 0.3em;
       text-transform: uppercase;
-      color: #e8960c;
+      color: #cc2828;
     }
 
     h1 span {
-      color: #7a6a3a;
+      color: #7a3535;
       font-size: 11px;
       letter-spacing: 0.18em;
       margin-left: 14px;
@@ -67,21 +67,21 @@
       font-size: 11px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: #7a6a3a;
+      color: #7a3535;
       transition: color 0.4s;
     }
 
     .dot {
       width: 6px; height: 6px;
       border-radius: 50%;
-      background: #2a2210;
+      background: #2a1010;
       transition: background 0.4s;
     }
 
-    #status.running { color: #e8960c; }
+    #status.running { color: #cc2828; }
     #status.running .dot {
-      background: #e8960c;
-      box-shadow: 0 0 6px #e8960c88;
+      background: #cc2828;
+      box-shadow: 0 0 6px #cc282888;
       animation: crtpulse 2s ease-in-out infinite;
     }
 
@@ -109,13 +109,13 @@
 
     .section-divider {
       border: none;
-      border-top: 1px solid #1e1c10;
+      border-top: 1px solid #1e0f0f;
       margin: 0;
     }
 
     .layer {
-      background: #100f08;
-      border: 1px solid #1e1c10;
+      background: #0f0808;
+      border: 1px solid #1e0f0f;
       border-radius: 4px;
       padding: 8px 10px 10px;
       display: flex;
@@ -133,12 +133,12 @@
       font-size: 11px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: #7a6a3a;
+      color: #7a3535;
     }
 
     .layer-val {
       font-size: 12px;
-      color: #e8960c;
+      color: #cc2828;
       font-variant-numeric: tabular-nums;
       min-width: 22px;
       text-align: right;
@@ -146,7 +146,7 @@
 
     .layer-desc {
       font-size: 11px;
-      color: #6a5e3e;
+      color: #6a3535;
       line-height: 1.4;
       margin-top: -4px;
     }
@@ -156,7 +156,7 @@
       appearance: none;
       width: 100%;
       height: 2px;
-      background: #2a2210;
+      background: #2a1010;
       border-radius: 1px;
       outline: none;
       cursor: pointer;
@@ -166,13 +166,13 @@
       -webkit-appearance: none;
       width: 20px; height: 20px;
       border-radius: 2px;
-      background: #e8960c;
+      background: #cc2828;
       cursor: pointer;
       border: none;
     }
 
     input[type="range"]:active::-webkit-slider-thumb {
-      background: #ffb822;
+      background: #e84040;
       transform: scale(1.1);
     }
 
@@ -183,8 +183,8 @@
     }
 
     .panel {
-      background: #100f08;
-      border: 1px solid #1e1c10;
+      background: #0f0808;
+      border: 1px solid #1e0f0f;
       border-radius: 4px;
       padding: 12px 14px;
       display: flex;
@@ -196,7 +196,7 @@
       font-size: 11px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: #7a6a3a;
+      color: #7a3535;
     }
 
     .btn-row  { display: flex; gap: 5px; }
@@ -206,10 +206,10 @@
       flex: 1;
       min-width: 28px;
       padding: 8px 4px;
-      background: #14120a;
-      border: 1px solid #3a3018;
+      background: #120808;
+      border: 1px solid #3a1818;
       border-radius: 3px;
-      color: #b09040;
+      color: #b04040;
       font-size: 11px;
       font-family: inherit;
       letter-spacing: 0.08em;
@@ -221,8 +221,8 @@
       transition: background 0.12s, border-color 0.12s, color 0.12s;
     }
 
-    .btn:active  { background: #2a1c00; }
-    .btn.active  { background: #1c1200; border-color: #e8960c; color: #e8960c; }
+    .btn:active  { background: #280a0a; }
+    .btn.active  { background: #1c0808; border-color: #cc2828; color: #cc2828; }
     .btn:disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
 
     .btn-trigger {
@@ -234,10 +234,10 @@
     .btn-label {
       display: inline-block;
       padding: 8px 10px;
-      background: #14120a;
-      border: 1px solid #3a3018;
+      background: #120808;
+      border: 1px solid #3a1818;
       border-radius: 3px;
-      color: #b09040;
+      color: #b04040;
       font-size: 11px;
       font-family: inherit;
       letter-spacing: 0.08em;
@@ -247,10 +247,10 @@
       white-space: nowrap;
       -webkit-tap-highlight-color: transparent;
     }
-    .btn-label:active { background: #2a1c00; }
+    .btn-label:active { background: #280a0a; }
 
     /* Freeze is a .btn modifier — base sizing from .btn */
-    .btn-freeze { color: #5a5040; border-color: #2a2410; }
+    .btn-freeze { color: #5a3030; border-color: #2a1212; }
     .btn-freeze.active { background: #081420; border-color: #2288aa; color: #2288aa; box-shadow: 0 0 8px #2288aa44; }
 
     /* ---- Sample players ---- */
@@ -264,8 +264,8 @@
     }
 
     .sample-section {
-      background: #100f08;
-      border: 1px solid #1e1c10;
+      background: #0f0808;
+      border: 1px solid #1e0f0f;
       border-radius: 4px;
       padding: 6px 10px 8px;
       display: flex;
@@ -311,21 +311,21 @@
     .sample-time {
       font-size: 11px;
       letter-spacing: 0.08em;
-      color: #4a4030;
+      color: #4a2828;
       font-variant-numeric: tabular-nums;
       flex-shrink: 0;
       min-width: 42px;
       text-align: right;
       align-self: center;
     }
-    .sample-time.active { color: #e8960c; }
+    .sample-time.active { color: #cc2828; }
 
     .sample-scrub {
       -webkit-appearance: none;
       appearance: none;
       width: 100%;
       height: 3px;
-      background: #1e1c10;
+      background: #1e0f0f;
       border-radius: 1px;
       outline: none;
       cursor: pointer;
@@ -337,11 +337,11 @@
       width: 4px;
       height: 20px;
       border-radius: 1px;
-      background: #e8960c;
+      background: #cc2828;
       cursor: grab;
       border: none;
     }
-    .sample-scrub:active::-webkit-slider-thumb { background: #ffb822; cursor: grabbing; }
+    .sample-scrub:active::-webkit-slider-thumb { background: #e84040; cursor: grabbing; }
 
     /* Keep control-area sliders explicitly horizontal and smaller-thumbed */
     .sample-ctrl-col input[type="range"] {
@@ -355,7 +355,7 @@
     }
 
     .sample-ctrl-col input[type="range"]:active::-webkit-slider-thumb {
-      background: #ffb822;
+      background: #e84040;
       transform: scale(1.1);
     }
 
@@ -376,7 +376,7 @@
 
     .fader-label {
       font-size: 10px;
-      color: #7a6a3a;
+      color: #7a3535;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       flex-shrink: 0;
@@ -384,7 +384,7 @@
 
     .fader-val {
       font-size: 10px;
-      color: #e8960c;
+      color: #cc2828;
       font-variant-numeric: tabular-nums;
       flex-shrink: 0;
     }
@@ -398,7 +398,7 @@
       height: auto;
       flex: 1;
       min-height: 60px;
-      background: #2a2210;
+      background: #2a1010;
       border-radius: 1px;
       outline: none;
       cursor: pointer;
@@ -411,16 +411,16 @@
       width: 22px;
       height: 16px;
       border-radius: 2px;
-      background: #e8960c;
+      background: #cc2828;
       cursor: pointer;
       border: none;
     }
 
-    .v-slider:active::-webkit-slider-thumb { background: #ffb822; }
+    .v-slider:active::-webkit-slider-thumb { background: #e84040; }
 
     .sample-name {
       font-size: 11px;
-      color: #4a4030;
+      color: #4a2828;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -429,7 +429,7 @@
       letter-spacing: 0.04em;
     }
 
-    .sample-name.loaded { color: #e8960c; }
+    .sample-name.loaded { color: #cc2828; }
 
     .density-block { display: flex; flex-direction: column; gap: 5px; }
 
@@ -437,7 +437,7 @@
       display: flex;
       justify-content: space-between;
       font-size: 10px;
-      color: #5a4e30;
+      color: #5a3030;
       letter-spacing: 0.1em;
       text-transform: uppercase;
     }
@@ -446,10 +446,10 @@
       width: 100%;
       padding: 14px;
       margin-top: auto;
-      background: #1c1200;
-      border: 1px solid #e8960c;
+      background: #1c0808;
+      border: 1px solid #cc2828;
       border-radius: 3px;
-      color: #e8960c;
+      color: #cc2828;
       font-size: 12px;
       font-family: inherit;
       letter-spacing: 0.25em;
@@ -465,9 +465,9 @@
 
     #loading {
       position: fixed; inset: 0;
-      background: #0c0b07;
+      background: #0c0707;
       display: flex; align-items: center; justify-content: center;
-      font-size: 10px; letter-spacing: 0.25em; color: #7a6a3a;
+      font-size: 10px; letter-spacing: 0.25em; color: #7a3535;
       text-transform: uppercase;
       font-family: inherit;
       opacity: 0; pointer-events: none;
@@ -626,7 +626,7 @@
         <div class="btn" data-shape="down">Down</div>
         <div class="btn" data-shape="random">Rnd</div>
       </div>
-      <span class="panel-label">Arp Rate &nbsp;<span id="arp-rate-val" style="color:#e8960c;">~8s</span></span>
+      <span class="panel-label">Arp Rate &nbsp;<span id="arp-rate-val" style="color:#cc2828;">~8s</span></span>
       <input type="range" id="arp-rate" min="0" max="100" value="25">
       <div class="density-labels"><span>Slow</span><span>Fast</span></div>
     </div>
@@ -662,11 +662,11 @@
         <div class="sample-controls">
           <div class="sample-ctrl-col">
             <span class="panel-label">EQ</span>
-            <span class="layer-desc">Low &nbsp;<span id="sample-eq-low-val-a" style="color:#e8960c;">0 dB</span></span>
+            <span class="layer-desc">Low &nbsp;<span id="sample-eq-low-val-a" style="color:#cc2828;">0 dB</span></span>
             <input type="range" id="sample-eq-low-a" min="-20" max="12" value="0">
-            <span class="layer-desc">Mid &nbsp;<span id="sample-eq-mid-val-a" style="color:#e8960c;">0 dB</span></span>
+            <span class="layer-desc">Mid &nbsp;<span id="sample-eq-mid-val-a" style="color:#cc2828;">0 dB</span></span>
             <input type="range" id="sample-eq-mid-a" min="-20" max="12" value="0">
-            <span class="layer-desc">High &nbsp;<span id="sample-eq-high-val-a" style="color:#e8960c;">0 dB</span></span>
+            <span class="layer-desc">High &nbsp;<span id="sample-eq-high-val-a" style="color:#cc2828;">0 dB</span></span>
             <input type="range" id="sample-eq-high-a" min="-20" max="12" value="0">
             <span class="panel-label">Filter</span>
             <div class="btn-row">
@@ -674,22 +674,22 @@
               <button class="btn" data-player="a" data-ftype="highpass">HP</button>
               <button class="btn" data-player="a" data-ftype="bandpass">BP</button>
             </div>
-            <span class="layer-desc">Freq &nbsp;<span id="sample-filter-freq-val-a" style="color:#e8960c;">20kHz</span></span>
+            <span class="layer-desc">Freq &nbsp;<span id="sample-filter-freq-val-a" style="color:#cc2828;">20kHz</span></span>
             <input type="range" id="sample-filter-freq-a" min="0" max="100" value="100">
             <span class="layer-desc">Res</span>
             <input type="range" id="sample-filter-res-a" min="0" max="100" value="0">
           </div>
           <div class="sample-ctrl-col">
             <span class="panel-label">Delay</span>
-            <span class="layer-desc">Time &nbsp;<span id="sample-delay-time-val-a" style="color:#e8960c;">0ms</span></span>
+            <span class="layer-desc">Time &nbsp;<span id="sample-delay-time-val-a" style="color:#cc2828;">0ms</span></span>
             <input type="range" id="sample-delay-time-a" min="0" max="100" value="0">
-            <span class="layer-desc">Feedback &nbsp;<span id="sample-delay-fb-val-a" style="color:#e8960c;">0%</span></span>
+            <span class="layer-desc">Feedback &nbsp;<span id="sample-delay-fb-val-a" style="color:#cc2828;">0%</span></span>
             <input type="range" id="sample-delay-fb-a" min="0" max="100" value="0">
-            <span class="layer-desc">Wet &nbsp;<span id="sample-delay-wet-val-a" style="color:#e8960c;">0%</span></span>
+            <span class="layer-desc">Wet &nbsp;<span id="sample-delay-wet-val-a" style="color:#cc2828;">0%</span></span>
             <input type="range" id="sample-delay-wet-a" min="0" max="100" value="0">
             <span class="panel-label">Reverb</span>
             <input type="range" id="sample-reverb-a" min="0" max="100" value="0">
-            <span class="panel-label">Wow &amp; Flutter &nbsp;<span id="sample-wow-val-a" style="color:#e8960c;">0%</span></span>
+            <span class="panel-label">Wow &amp; Flutter &nbsp;<span id="sample-wow-val-a" style="color:#cc2828;">0%</span></span>
             <input type="range" id="sample-wow-a" min="0" max="100" value="0">
           </div>
         </div>
@@ -737,11 +737,11 @@
         <div class="sample-controls">
           <div class="sample-ctrl-col">
             <span class="panel-label">EQ</span>
-            <span class="layer-desc">Low &nbsp;<span id="sample-eq-low-val-b" style="color:#e8960c;">0 dB</span></span>
+            <span class="layer-desc">Low &nbsp;<span id="sample-eq-low-val-b" style="color:#cc2828;">0 dB</span></span>
             <input type="range" id="sample-eq-low-b" min="-20" max="12" value="0">
-            <span class="layer-desc">Mid &nbsp;<span id="sample-eq-mid-val-b" style="color:#e8960c;">0 dB</span></span>
+            <span class="layer-desc">Mid &nbsp;<span id="sample-eq-mid-val-b" style="color:#cc2828;">0 dB</span></span>
             <input type="range" id="sample-eq-mid-b" min="-20" max="12" value="0">
-            <span class="layer-desc">High &nbsp;<span id="sample-eq-high-val-b" style="color:#e8960c;">0 dB</span></span>
+            <span class="layer-desc">High &nbsp;<span id="sample-eq-high-val-b" style="color:#cc2828;">0 dB</span></span>
             <input type="range" id="sample-eq-high-b" min="-20" max="12" value="0">
             <span class="panel-label">Filter</span>
             <div class="btn-row">
@@ -749,22 +749,22 @@
               <button class="btn" data-player="b" data-ftype="highpass">HP</button>
               <button class="btn" data-player="b" data-ftype="bandpass">BP</button>
             </div>
-            <span class="layer-desc">Freq &nbsp;<span id="sample-filter-freq-val-b" style="color:#e8960c;">20kHz</span></span>
+            <span class="layer-desc">Freq &nbsp;<span id="sample-filter-freq-val-b" style="color:#cc2828;">20kHz</span></span>
             <input type="range" id="sample-filter-freq-b" min="0" max="100" value="100">
             <span class="layer-desc">Res</span>
             <input type="range" id="sample-filter-res-b" min="0" max="100" value="0">
           </div>
           <div class="sample-ctrl-col">
             <span class="panel-label">Delay</span>
-            <span class="layer-desc">Time &nbsp;<span id="sample-delay-time-val-b" style="color:#e8960c;">0ms</span></span>
+            <span class="layer-desc">Time &nbsp;<span id="sample-delay-time-val-b" style="color:#cc2828;">0ms</span></span>
             <input type="range" id="sample-delay-time-b" min="0" max="100" value="0">
-            <span class="layer-desc">Feedback &nbsp;<span id="sample-delay-fb-val-b" style="color:#e8960c;">0%</span></span>
+            <span class="layer-desc">Feedback &nbsp;<span id="sample-delay-fb-val-b" style="color:#cc2828;">0%</span></span>
             <input type="range" id="sample-delay-fb-b" min="0" max="100" value="0">
-            <span class="layer-desc">Wet &nbsp;<span id="sample-delay-wet-val-b" style="color:#e8960c;">0%</span></span>
+            <span class="layer-desc">Wet &nbsp;<span id="sample-delay-wet-val-b" style="color:#cc2828;">0%</span></span>
             <input type="range" id="sample-delay-wet-b" min="0" max="100" value="0">
             <span class="panel-label">Reverb</span>
             <input type="range" id="sample-reverb-b" min="0" max="100" value="0">
-            <span class="panel-label">Wow &amp; Flutter &nbsp;<span id="sample-wow-val-b" style="color:#e8960c;">0%</span></span>
+            <span class="panel-label">Wow &amp; Flutter &nbsp;<span id="sample-wow-val-b" style="color:#cc2828;">0%</span></span>
             <input type="range" id="sample-wow-b" min="0" max="100" value="0">
           </div>
         </div>
