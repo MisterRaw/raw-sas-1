@@ -880,8 +880,8 @@ async function buildNodes() {
   const texLfo = new Tone.LFO({ frequency: 0.016, min: 180, max: 520 }).connect(texFilter.frequency);
   texLfo.start(); texNoise.start();
 
-  // TONES
-  const tonesGain = new Tone.Gain(state.volumes.tones / 100);
+  // TONES (scaled 0.4 — sine synths are perceptually loud)
+  const tonesGain = new Tone.Gain((state.volumes.tones / 100) * 0.4);
   tonesGain.connect(masterGain);
   const toneSynth = new Tone.Synth({
     oscillator: { type: 'sine' },
@@ -919,8 +919,8 @@ async function buildNodes() {
   arpPattern.interval = state.arpRate;
   arpPattern.start(0);
 
-  // MODEM (gain scaled 0.35 — pure sines are perceptually loud)
-  const modemGain = new Tone.Gain((state.volumes.modem / 100) * 0.35);
+  // MODEM (gain scaled 0.2 — pure sines are perceptually loud)
+  const modemGain = new Tone.Gain((state.volumes.modem / 100) * 0.2);
   modemGain.connect(masterGain);
   const modemHPF = new Tone.Filter({ type: 'highpass', frequency: 300,  rolloff: -12 });
   const modemLPF = new Tone.Filter({ type: 'lowpass',  frequency: 3400, rolloff: -12 });
@@ -946,10 +946,13 @@ async function buildNodes() {
   const radioFilterLFO = new Tone.LFO({ frequency: 0.008, min: 400, max: 5000, type: 'sine' });
   radioFilterLFO.connect(radioBPF.frequency);
   radioFilterLFO.start(); radioNoise.start();
+  // Ghost synth has its own gain → master so static volume doesn't suppress it
+  const ghostGain = new Tone.Gain(0.10);
+  ghostGain.connect(masterGain);
   const radioGhostSynth = new Tone.Synth({
     oscillator: { type: 'sine' },
     envelope: { attack: 1.5, decay: 0, sustain: 1, release: 2.5 }
-  }).connect(radioGain);
+  }).connect(ghostGain);
 
   // OSCILLATORS (unstable)
   const unstableGain = new Tone.Gain(state.volumes.unstable / 100);
@@ -986,7 +989,7 @@ async function buildNodes() {
     movementGain, movNoise, movFilter, movAmp, movFilterLfo, movAmpLfo,
     arpeggioGain, arpSynth, arpDelay, arpPattern,
     modemGain, modemHPF, modemLPF, modemEQ, modemSynthA, modemSynthB, modemNoise, modemNoiseGain,
-    radioGain, radioNoise, radioBPF, radioHPF, radioLPF, radioEQ, radioFilterLFO, radioGhostSynth,
+    radioGain, radioNoise, radioBPF, radioHPF, radioLPF, radioEQ, radioFilterLFO, ghostGain, radioGhostSynth,
     unstableGain, unstableMix, unstableEQ, unstableOsc1, unstableOsc2, unstableLFO1, unstableLFO2,
     breathGain, breathEnv, breathOsc1, breathOsc2, breathLFO
   };
@@ -998,7 +1001,7 @@ function destroyNodes() {
   Tone.Transport.stop();
   const lfos = ['dLfo1','dLfo2','dLfo3','swellLfo','texLfo','movFilterLfo','movAmpLfo','radioFilterLFO','unstableLFO1','unstableLFO2','breathLFO'];
   const oscs = ['osc1','osc2','osc3','texNoise','movNoise','modemNoise','radioNoise','unstableOsc1','unstableOsc2','breathOsc1','breathOsc2'];
-  const rest = ['masterGain','reverb','limiter','droneGain','swellGain','textureGain','texFilter','texAmp','tonesGain','toneSynth','toneSynth2','movementGain','movFilter','movAmp','arpeggioGain','arpSynth','arpDelay','modemGain','modemHPF','modemLPF','modemEQ','modemSynthA','modemSynthB','modemNoiseGain','radioGain','radioBPF','radioHPF','radioLPF','radioEQ','radioGhostSynth','unstableGain','unstableMix','unstableEQ','breathGain','breathEnv'];
+  const rest = ['masterGain','reverb','limiter','droneGain','swellGain','textureGain','texFilter','texAmp','tonesGain','toneSynth','toneSynth2','movementGain','movFilter','movAmp','arpeggioGain','arpSynth','arpDelay','modemGain','modemHPF','modemLPF','modemEQ','modemSynthA','modemSynthB','modemNoiseGain','radioGain','radioBPF','radioHPF','radioLPF','radioEQ','ghostGain','radioGhostSynth','unstableGain','unstableMix','unstableEQ','breathGain','breathEnv'];
   [...lfos,...oscs].forEach(k => { try { nodes[k].stop(); } catch(e) {} try { nodes[k].dispose(); } catch(e) {} });
   rest.forEach(k => { try { nodes[k].dispose(); } catch(e) {} });
   nodes = null;
@@ -1166,7 +1169,7 @@ function updateLayerVol(layer, val) {
   if (!nodes) return;
   const g = nodes[`${layer}Gain`];
   if (!g) return;
-  const scale = (layer === 'modem') ? 0.35 : 1;
+  const scale = layer === 'modem' ? 0.2 : layer === 'tones' ? 0.4 : 1;
   g.gain.rampTo((val / 100) * scale, 0.4);
 }
 
