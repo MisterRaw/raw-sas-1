@@ -152,13 +152,21 @@
       margin-top: -4px;
     }
 
-    .pan-val {
+    .pan-val-center {
       font-size: 10px;
       color: #cc2828;
       font-variant-numeric: tabular-nums;
-      min-width: 28px;
-      display: inline-block;
-      text-align: right;
+      display: block;
+      text-align: center;
+      width: 100%;
+    }
+
+    .pan-slider-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 2px;
     }
 
     .layer-blurb {
@@ -573,40 +581,45 @@
       <span class="layer-blurb">Fundamental pitch: slowly drifting in and out of tune with itself</span>
       <span class="panel-label">Volume</span>
       <input type="range" id="vol-drone" min="0" max="100" value="20">
-      <span class="panel-label">Pan &nbsp;<span id="pan-val-drone" class="pan-val">C</span></span>
+      <span class="panel-label">Pan</span>
       <input type="range" id="pan-drone" min="-100" max="100" value="0">
+      <span id="pan-val-drone" class="pan-val-center">C</span>
     </div>
     <div class="layer">
       <div class="layer-header"><span class="layer-name">Texture</span><span class="layer-val" id="val-texture">0</span></div>
       <span class="layer-blurb">Filtered noise: air, breath and presence</span>
       <span class="panel-label">Volume</span>
       <input type="range" id="vol-texture" min="0" max="100" value="0">
-      <span class="panel-label">Pan &nbsp;<span id="pan-val-texture" class="pan-val">C</span></span>
+      <span class="panel-label">Pan</span>
       <input type="range" id="pan-texture" min="-100" max="100" value="0">
+      <span id="pan-val-texture" class="pan-val-center">C</span>
     </div>
     <div class="layer">
       <div class="layer-header"><span class="layer-name">Tones</span><span class="layer-val" id="val-tones">0</span></div>
       <span class="layer-blurb">Melodic notes: appear and fade slowly, never repeating</span>
       <span class="panel-label">Volume</span>
       <input type="range" id="vol-tones" min="0" max="100" value="0">
-      <span class="panel-label">Pan &nbsp;<span id="pan-val-tones" class="pan-val">C</span></span>
+      <span class="panel-label">Pan</span>
       <input type="range" id="pan-tones" min="-100" max="100" value="0">
+      <span id="pan-val-tones" class="pan-val-center">C</span>
     </div>
     <div class="layer">
       <div class="layer-header"><span class="layer-name">Rumble</span><span class="layer-val" id="val-movement">0</span></div>
       <span class="layer-blurb">Low rumble with tremolo: water, wind, space breathing</span>
       <span class="panel-label">Volume</span>
       <input type="range" id="vol-movement" min="0" max="100" value="0">
-      <span class="panel-label">Pan &nbsp;<span id="pan-val-movement" class="pan-val">C</span></span>
+      <span class="panel-label">Pan</span>
       <input type="range" id="pan-movement" min="-100" max="100" value="0">
+      <span id="pan-val-movement" class="pan-val-center">C</span>
     </div>
     <div class="layer">
       <div class="layer-header"><span class="layer-name">Arpeggio</span><span class="layer-val" id="val-arpeggio">0</span></div>
       <span class="layer-blurb">Sequenced notes: cycling through the scale, turn up to activate</span>
       <span class="panel-label">Volume</span>
       <input type="range" id="vol-arpeggio" min="0" max="100" value="0">
-      <span class="panel-label">Pan &nbsp;<span id="pan-val-arpeggio" class="pan-val">C</span></span>
+      <span class="panel-label">Pan</span>
       <input type="range" id="pan-arpeggio" min="-100" max="100" value="0">
+      <span id="pan-val-arpeggio" class="pan-val-center">C</span>
     </div>
   </div>
 
@@ -619,8 +632,9 @@
       <span class="layer-blurb">Dial-up sequence: dial tone, DTMF, carrier squeal, data burst</span>
       <span class="panel-label">Volume</span>
       <input type="range" id="vol-modem" min="0" max="100" value="0">
-      <span class="panel-label">Pan &nbsp;<span id="pan-val-modem" class="pan-val">C</span></span>
+      <span class="panel-label">Pan</span>
       <input type="range" id="pan-modem" min="-100" max="100" value="0">
+      <span id="pan-val-modem" class="pan-val-center">C</span>
       <button class="btn btn-trigger" id="modem-trigger">Trigger</button>
     </div>
     <div class="layer">
@@ -628,24 +642,27 @@
       <span class="layer-blurb">AM static: white noise sweeping slowly through the frequency spectrum</span>
       <span class="panel-label">Volume</span>
       <input type="range" id="vol-radio" min="0" max="100" value="0">
-      <span class="panel-label">Pan &nbsp;<span id="pan-val-radio" class="pan-val">C</span></span>
+      <span class="panel-label">Pan</span>
       <input type="range" id="pan-radio" min="-100" max="100" value="0">
+      <span id="pan-val-radio" class="pan-val-center">C</span>
     </div>
     <div class="layer">
       <div class="layer-header"><span class="layer-name">Oscillators</span><span class="layer-val" id="val-unstable">0</span></div>
       <span class="layer-blurb">Drifting sine oscillators: aged test equipment, root-independent</span>
       <span class="panel-label">Volume</span>
       <input type="range" id="vol-unstable" min="0" max="100" value="0">
-      <span class="panel-label">Pan &nbsp;<span id="pan-val-unstable" class="pan-val">C</span></span>
+      <span class="panel-label">Pan</span>
       <input type="range" id="pan-unstable" min="-100" max="100" value="0">
+      <span id="pan-val-unstable" class="pan-val-center">C</span>
     </div>
     <div class="layer">
       <div class="layer-header"><span class="layer-name">Pulse</span><span class="layer-val" id="val-breath">0</span></div>
       <span class="layer-blurb">Sub-bass swell: 20-second breathing cycle at the root</span>
       <span class="panel-label">Volume</span>
       <input type="range" id="vol-breath" min="0" max="100" value="0">
-      <span class="panel-label">Pan &nbsp;<span id="pan-val-breath" class="pan-val">C</span></span>
+      <span class="panel-label">Pan</span>
       <input type="range" id="pan-breath" min="-100" max="100" value="0">
+      <span id="pan-val-breath" class="pan-val-center">C</span>
     </div>
   </div>
 
@@ -713,7 +730,7 @@
         <button class="btn btn-freeze" id="sample-freeze-a">Freeze</button>
       </div>
       <input type="range" class="sample-scrub" id="sample-scrub-a" min="0" max="1000" value="0" disabled>
-      <div class="sample-pan-row"><span class="panel-label">Pan &nbsp;<span id="sample-pan-val-a" class="pan-val">C</span></span><input type="range" id="sample-pan-a" min="-100" max="100" value="0"></div>
+      <div class="sample-pan-row"><span class="panel-label">Pan</span><div class="pan-slider-col"><input type="range" id="sample-pan-a" min="-100" max="100" value="0"><span id="sample-pan-val-a" class="pan-val-center">C</span></div></div>
       <div class="sample-body">
         <div class="sample-controls">
           <div class="sample-ctrl-col">
@@ -777,7 +794,7 @@
         <button class="btn btn-freeze" id="sample-freeze-b">Freeze</button>
       </div>
       <input type="range" class="sample-scrub" id="sample-scrub-b" min="0" max="1000" value="0" disabled>
-      <div class="sample-pan-row"><span class="panel-label">Pan &nbsp;<span id="sample-pan-val-b" class="pan-val">C</span></span><input type="range" id="sample-pan-b" min="-100" max="100" value="0"></div>
+      <div class="sample-pan-row"><span class="panel-label">Pan</span><div class="pan-slider-col"><input type="range" id="sample-pan-b" min="-100" max="100" value="0"><span id="sample-pan-val-b" class="pan-val-center">C</span></div></div>
       <div class="sample-body">
         <div class="sample-faders">
           <div class="fader-col">
