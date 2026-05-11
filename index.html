@@ -595,7 +595,7 @@
     </div>
     <div class="layer">
       <div class="layer-header"><span class="layer-name">Static</span><span class="layer-val" id="val-radio">0</span></div>
-      <span class="layer-blurb">AM static: noise sweeping slowly through the frequency spectrum</span>
+      <span class="layer-blurb">AM static: white noise sweeping slowly through the frequency spectrum</span>
       <span class="panel-label">Volume</span>
       <input type="range" id="vol-radio" min="0" max="100" value="0">
     </div>
@@ -831,7 +831,6 @@ const state = {
 let nodes = null;
 let toneTimer = null;
 let modemTimer = null;
-let radioGhostTimer = null;
 
 const ROOTS = {
   'A':55.00,'A♭':51.91,'B':61.74,'B♭':58.27,'C':65.41,'C♯':69.30,
@@ -946,13 +945,6 @@ async function buildNodes() {
   const radioFilterLFO = new Tone.LFO({ frequency: 0.008, min: 400, max: 5000, type: 'sine' });
   radioFilterLFO.connect(radioBPF.frequency);
   radioFilterLFO.start(); radioNoise.start();
-  // Ghost synth has its own gain → master so static volume doesn't suppress it
-  const ghostGain = new Tone.Gain(0.10);
-  ghostGain.connect(masterGain);
-  const radioGhostSynth = new Tone.Synth({
-    oscillator: { type: 'sine' },
-    envelope: { attack: 1.5, decay: 0, sustain: 1, release: 2.5 }
-  }).connect(ghostGain);
 
   // OSCILLATORS (unstable)
   const unstableGain = new Tone.Gain(state.volumes.unstable / 100);
@@ -989,7 +981,7 @@ async function buildNodes() {
     movementGain, movNoise, movFilter, movAmp, movFilterLfo, movAmpLfo,
     arpeggioGain, arpSynth, arpDelay, arpPattern,
     modemGain, modemHPF, modemLPF, modemEQ, modemSynthA, modemSynthB, modemNoise, modemNoiseGain,
-    radioGain, radioNoise, radioBPF, radioHPF, radioLPF, radioEQ, radioFilterLFO, ghostGain, radioGhostSynth,
+    radioGain, radioNoise, radioBPF, radioHPF, radioLPF, radioEQ, radioFilterLFO,
     unstableGain, unstableMix, unstableEQ, unstableOsc1, unstableOsc2, unstableLFO1, unstableLFO2,
     breathGain, breathEnv, breathOsc1, breathOsc2, breathLFO
   };
@@ -1001,7 +993,7 @@ function destroyNodes() {
   Tone.Transport.stop();
   const lfos = ['dLfo1','dLfo2','dLfo3','swellLfo','texLfo','movFilterLfo','movAmpLfo','radioFilterLFO','unstableLFO1','unstableLFO2','breathLFO'];
   const oscs = ['osc1','osc2','osc3','texNoise','movNoise','modemNoise','radioNoise','unstableOsc1','unstableOsc2','breathOsc1','breathOsc2'];
-  const rest = ['masterGain','reverb','limiter','droneGain','swellGain','textureGain','texFilter','texAmp','tonesGain','toneSynth','toneSynth2','movementGain','movFilter','movAmp','arpeggioGain','arpSynth','arpDelay','modemGain','modemHPF','modemLPF','modemEQ','modemSynthA','modemSynthB','modemNoiseGain','radioGain','radioBPF','radioHPF','radioLPF','radioEQ','ghostGain','radioGhostSynth','unstableGain','unstableMix','unstableEQ','breathGain','breathEnv'];
+  const rest = ['masterGain','reverb','limiter','droneGain','swellGain','textureGain','texFilter','texAmp','tonesGain','toneSynth','toneSynth2','movementGain','movFilter','movAmp','arpeggioGain','arpSynth','arpDelay','modemGain','modemHPF','modemLPF','modemEQ','modemSynthA','modemSynthB','modemNoiseGain','radioGain','radioBPF','radioHPF','radioLPF','radioEQ','unstableGain','unstableMix','unstableEQ','breathGain','breathEnv'];
   [...lfos,...oscs].forEach(k => { try { nodes[k].stop(); } catch(e) {} try { nodes[k].dispose(); } catch(e) {} });
   rest.forEach(k => { try { nodes[k].dispose(); } catch(e) {} });
   nodes = null;
@@ -1077,21 +1069,6 @@ function scheduleNextModem() {
   }, rnd(15000, 35000));
 }
 
-function playGhostStation(n) {
-  if (!n || !state.running) return;
-  const pools = { tone:[440,660,880,550], drone:[110,220,82.4,164.8], hum:[50,100,150] };
-  const station = ['tone','drone','hum'][Math.floor(Math.random() * 3)];
-  const pool = pools[station];
-  try { n.radioGhostSynth.triggerAttackRelease(pool[Math.floor(Math.random() * pool.length)], rnd(3, 10)); } catch(e) {}
-}
-
-function scheduleNextGhost() {
-  if (!state.running) return;
-  radioGhostTimer = setTimeout(() => {
-    if (!state.running || !nodes) return;
-    playGhostStation(nodes); scheduleNextGhost();
-  }, rnd(6000, 20000));
-}
 
 // ================================================================
 // CHARACTER PRESETS
@@ -1129,7 +1106,6 @@ async function start() {
     Tone.Transport.start();
     toneTimer       = setTimeout(scheduleNextTone,  6000  + Math.random() * 4000);
     modemTimer      = setTimeout(scheduleNextModem, 12000 + Math.random() * 8000);
-    radioGhostTimer = setTimeout(scheduleNextGhost, 5000  + Math.random() * 8000);
     setStatus('running');
     document.getElementById('start-btn').classList.add('running');
     document.getElementById('start-btn').textContent = 'Stop';
@@ -1141,8 +1117,8 @@ async function start() {
 
 function stop() {
   state.running = false; state.modemPlaying = false;
-  [toneTimer, modemTimer, radioGhostTimer].forEach(t => t && clearTimeout(t));
-  toneTimer = modemTimer = radioGhostTimer = null;
+  [toneTimer, modemTimer].forEach(t => t && clearTimeout(t));
+  toneTimer = modemTimer = null;
   if (nodes) { try { nodes.masterGain.gain.rampTo(0, 1.5); } catch(e) {} setTimeout(destroyNodes, 2000); }
   setStatus('ready');
   document.getElementById('start-btn').classList.remove('running');
