@@ -1767,6 +1767,33 @@ document.getElementById('rec-btn').addEventListener('click', async () => {
     URL.revokeObjectURL(url);
   }
 });
+
+// ================================================================
+// DOUBLE-CLICK / DOUBLE-TAP TO RESET SLIDERS TO DEFAULT
+// ================================================================
+(function() {
+  const lastTap = new WeakMap();
+
+  document.querySelectorAll('input[type="range"]').forEach(el => {
+    el.addEventListener('dblclick', function() {
+      this.value = this.defaultValue;
+      this.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+
+    el.addEventListener('touchend', function(e) {
+      const now = Date.now();
+      const prev = lastTap.get(this) || 0;
+      if (now - prev < 350) {
+        e.preventDefault();
+        this.value = this.defaultValue;
+        this.dispatchEvent(new Event('input', { bubbles: true }));
+        lastTap.set(this, 0);
+      } else {
+        lastTap.set(this, now);
+      }
+    });
+  });
+})();
 </script>
 </body>
 </html>
