@@ -347,6 +347,16 @@
     }
     .sample-time.active { color: #cc2828; }
 
+    .sample-bpm {
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      color: #4a2828;
+      font-variant-numeric: tabular-nums;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+    .sample-bpm.detected { color: #cc2828; }
+
     .sample-scrub {
       -webkit-appearance: none;
       appearance: none;
@@ -724,6 +734,7 @@
         <input type="file" id="sample-file-a" accept="audio/*,.wav,.mp3,.m4a,.aiff,.aif,.ogg,.flac,.opus,.webm,.caf" style="display:none">
         <span class="sample-name" id="sample-name-a">No file loaded</span>
         <span class="sample-time" id="sample-time-a"></span>
+        <span class="sample-bpm" id="sample-bpm-a">—</span>
         <button class="btn" id="sample-play-a" disabled>Play</button>
         <button class="btn" id="sample-stop-a" disabled>Stop</button>
         <button class="btn" id="sample-loop-a">Loop: Off</button>
@@ -788,6 +799,7 @@
         <input type="file" id="sample-file-b" accept="audio/*,.wav,.mp3,.m4a,.aiff,.aif,.ogg,.flac,.opus,.webm,.caf" style="display:none">
         <span class="sample-name" id="sample-name-b">No file loaded</span>
         <span class="sample-time" id="sample-time-b"></span>
+        <span class="sample-bpm" id="sample-bpm-b">—</span>
         <button class="btn" id="sample-play-b" disabled>Play</button>
         <button class="btn" id="sample-stop-b" disabled>Stop</button>
         <button class="btn" id="sample-loop-b">Loop: Off</button>
@@ -1276,6 +1288,73 @@ document.getElementById('start-btn').addEventListener('click', () => {
 });
 
 // ================================================================
+// BPM DETECTION
+// ================================================================
+async function detectBPM(audioBuffer) {
+  try {
+    const sr = audioBuffer.sampleRate;
+    const analysisLen = Math.min(audioBuffer.length, sr * 30);
+
+    // Mix to mono
+    const offCtx = new OfflineAudioContext(1, analysisLen, sr);
+    const mono = offCtx.createBuffer(1, analysisLen, sr);
+    const out = mono.getChannelData(0);
+    const nCh = audioBuffer.numberOfChannels;
+    for (let ch = 0; ch < nCh; ch++) {
+      const src = audioBuffer.getChannelData(ch);
+      for (let i = 0; i < analysisLen; i++) out[i] += src[i] / nCh;
+    }
+
+    // Low-pass to isolate kick/beat energy
+    const source = offCtx.createBufferSource();
+    source.buffer = mono;
+    const lpf = offCtx.createBiquadFilter();
+    lpf.type = 'lowpass';
+    lpf.frequency.value = 150;
+    source.connect(lpf);
+    lpf.connect(offCtx.destination);
+    source.start(0);
+
+    const rendered = await offCtx.startRendering();
+    const data = rendered.getChannelData(0);
+
+    // RMS envelope in 512-sample hops
+    const hop = 512;
+    const nFrames = Math.floor(analysisLen / hop);
+    const rms = new Float32Array(nFrames);
+    for (let i = 0; i < nFrames; i++) {
+      let s = 0, base = i * hop;
+      for (let j = 0; j < hop; j++) s += data[base + j] ** 2;
+      rms[i] = Math.sqrt(s / hop);
+    }
+
+    // Autocorrelation over 55–200 BPM range
+    const secPerFrame = hop / sr;
+    const minLag = Math.max(1, Math.round(60 / (200 * secPerFrame)));
+    const maxLag = Math.round(60 / (55 * secPerFrame));
+
+    let bestLag = minLag, bestCorr = 0, totalCorr = 0;
+    for (let lag = minLag; lag <= maxLag; lag++) {
+      let c = 0;
+      const n = nFrames - lag;
+      for (let i = 0; i < n; i++) c += rms[i] * rms[i + lag];
+      c /= n;
+      totalCorr += c;
+      if (c > bestCorr) { bestCorr = c; bestLag = lag; }
+    }
+
+    // Reject if no clear rhythmic peak (ambient/non-rhythmic content)
+    const avgCorr = totalCorr / (maxLag - minLag + 1);
+    if (bestCorr < avgCorr * 1.4) return null;
+
+    const bpm = Math.round(60 / (bestLag * secPerFrame));
+    return (bpm >= 55 && bpm <= 200) ? bpm : null;
+  } catch(e) {
+    return null;
+  }
+}
+
+// ================================================================
 // SAMPLE PLAYER FACTORY
 // ================================================================
 function formatFreq(hz) {
@@ -1447,6 +1526,8 @@ function createSamplePlayer(sfx) {
   function destroy() {
     if (wowInterval) { clearInterval(wowInterval); wowInterval = null; }
     scrubbing = false; seeking = false;
+    const bpmEl = $('sample-bpm');
+    if (bpmEl) { bpmEl.textContent = '—'; bpmEl.classList.remove('detected'); }
     stopTimeInterval();
     const scrub = $('sample-scrub');
     if (scrub) { scrub.value = 0; scrub.disabled = true; }
@@ -1485,7 +1566,16 @@ function createSamplePlayer(sfx) {
         ctx.decodeAudioData(arrayBuffer, resolve, reject)
       );
       await build(audioBuffer);
-      if (sNodes) $('sample-name').textContent = file.name;
+      if (sNodes) {
+        $('sample-name').textContent = file.name;
+        const bpmEl = $('sample-bpm');
+        bpmEl.textContent = '…';
+        bpmEl.classList.remove('detected');
+        detectBPM(audioBuffer).then(bpm => {
+          if (bpm) { bpmEl.textContent = `${bpm} BPM`; bpmEl.classList.add('detected'); }
+          else      { bpmEl.textContent = '—'; }
+        });
+      }
     } catch(e) {
       $('sample-name').textContent = 'Format not supported';
       console.error('Audio decode error:', e);
